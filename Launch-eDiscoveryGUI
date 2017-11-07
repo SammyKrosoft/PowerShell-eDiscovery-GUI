@@ -556,7 +556,7 @@ function Search-MailboxGUI
             else
             {
                 # $blankSource -eq $true
-                $Command = '$AllDatabases = get-MailboxDatabase; $AllDatabases | % {$MBXBatch = get-mailbox -ResultSize unlimited -Filter {RecipientTypeDetails -ne "DiscoveryMailbox"} ; $MBXBatch | '
+                $Command = '$AllDatabases1 = get-MailboxDatabase; $AllDatabases1 | % {$MBXBatch = get-mailbox -ResultSize unlimited -Filter {RecipientTypeDetails -ne "DiscoveryMailbox"} ; $MBXBatch | '
             }
             If ($chkDeleteMail.Checked -eq $true)
             {
