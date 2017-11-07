@@ -67,6 +67,8 @@ this function only. Fix : make it global for the whole application.
 18AUG2017 - incrementing minor version to get rid of minor-minor version
 Suggestion : add time in date selection for searches.
 1.5.6.1 - fixing Get-Mailbox -REsultSize Unlimited | Search-Mailbox / changing to Get-MailboxDatabase | ForEach {Get-Mailbox $_ -resultsize Unlmited | Search-Mailbox blablablabla}
+1.5.7 - Change to Delete e-mails option using Search-Mailbox : instead of loading all mailboxes of an Org and piping all on Search-Mailbox, 
+I load all MAilboxDatabases first, and using ForEach ($Database in $DatabaseList) {$MBXBatch = Get-Mailbox -Database $Database; and piping $MBXBatch to Search-Mailbox instead.
 
 
 Intention for vNext:
@@ -84,7 +86,7 @@ $TestMode = $false
 
 $OrganizationNameEN = "Microsoft Exchange Search"
 $OrganizationNameFR = "Recherche Microsoft Exchange"
-$CurrentVersion = "1.5.6.1"
+$CurrentVersion = "1.5.7"
 
 #------------------------------------------------
 #region Application Functions
