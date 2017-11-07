@@ -1723,7 +1723,7 @@ function Search-MailboxGUI
     $txtEndTime.Height = 20
     $txtEndTime.location = new-object system.drawing.point(560, 280)
     $txtEndTime.Font = "Microsoft Sans Serif,10"
-    $Form.controls.Add($txtEndTime)
+    $frmSearchForm.controls.Add($txtEndTime)
     # TimeStart Label
     $lblTimeStart = New-Object system.windows.Forms.Label
     $lblTimeStart.Text = "Time Start:"
@@ -1732,7 +1732,7 @@ function Search-MailboxGUI
     $lblTimeStart.Height = 10
     $lblTimeStart.location = new-object system.drawing.point(457, 252)
     $lblTimeStart.Font = "Microsoft Sans Serif,10"
-    $Form.controls.Add($lblTimeStart)
+    $frmSearchForm.controls.Add($lblTimeStart)
     # TimeEnd Label
     $lblTimeEnd = New-Object system.windows.Forms.Label
     $lblTimeEnd.Text = "Time End:"
@@ -1741,7 +1741,7 @@ function Search-MailboxGUI
     $lblTimeEnd.Height = 10
     $lblTimeEnd.location = new-object system.drawing.point(457, 281)
     $lblTimeEnd.Font = "Microsoft Sans Serif,10"
-    $Form.controls.Add($lblTimeEnd)
+    $frmSearchForm.controls.Add($lblTimeEnd)
     #
     # chkSubject
     #
