@@ -560,7 +560,7 @@ function Search-MailboxGUI
             }
             If ($chkDeleteMail.Checked -eq $true)
             {
-                $Command += "Search-Mailbox -TargetMailbox '$DiscoveryMailbox' -TargetFolder '$DiscoveryFolder' -SearchQuery $SearchQuery -Verbose -DeleteContent -Confirm:`$false"
+                $Command += "Search-Mailbox -TargetMailbox '$DiscoveryMailbox' -TargetFolder '$DiscoveryFolder' -SearchQuery $SearchQuery -Verbose -DeleteContent -Confirm:`$false -Force"
                 If ($BlankSource) {$Command += "}"}
                 # Update status bar
                 $StatusBar.Text = $Str004
