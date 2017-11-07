@@ -65,8 +65,9 @@ this function only. Fix : make it global for the whole application.
 1.5.5 - Review code and remove a few useless comments before publishing
 1.5.6 - Adding suggestions (no code modification) - Publishing version
 18AUG2017 - incrementing minor version to get rid of minor-minor version
-Suggestion : add time in date selection for searches.
+1.5.6.1 - fixing Get-Mailbox -REsultSize Unlimited | Search-Mailbox / changing to Get-MailboxDatabase | ForEach {Get-Mailbox $_ -resultsize Unlmited | Search-Mailbox blablablabla}
 
+Suggestion : add time in date selection for searches.
 Intention for vNext:
 - Add CSV file picker to choose .CSV file as input for list of mailboxes to search in
 Would also like to add function to test if each mailbox in the list exist before launching the search
