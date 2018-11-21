@@ -1,4 +1,4 @@
-<#
+﻿<#
     .NOTES
 	
 Needed a Graphical User Interface for eDiscovery tasks, for both Search-mailbox and New-MailboxSearch.
@@ -69,7 +69,7 @@ Suggestion : add time in date selection for searches.
 1.5.6.1 - fixing Get-Mailbox -REsultSize Unlimited | Search-Mailbox / changing to Get-MailboxDatabase | ForEach {Get-Mailbox $_ -resultsize Unlmited | Search-Mailbox blablablabla}
 1.5.7 - Change to Delete e-mails option using Search-Mailbox : instead of loading all mailboxes of an Org and piping all on Search-Mailbox, 
 I load all MAilboxDatabases first, and using ForEach ($Database in $DatabaseList) {$MBXBatch = Get-Mailbox -Database $Database; and piping $MBXBatch to Search-Mailbox instead.
-
+1.5.7.1 - Encoding issue - re-saved the file with UTF-8 encoding - French accents were messing up with the whole script
 
 Intention for vNext:
 - Add CSV file picker to choose .CSV file as input for list of mailboxes to search in
