@@ -86,7 +86,7 @@ $TestMode = $false
 
 $OrganizationNameEN = "Microsoft Exchange Search"
 $OrganizationNameFR = "Recherche Microsoft Exchange"
-$CurrentVersion = "1.5.7"
+$CurrentVersion = "1.5.7.1"
 
 #------------------------------------------------
 #region Application Functions
