@@ -70,6 +70,7 @@ Suggestion : add time in date selection for searches.
 1.5.7 - Change to Delete e-mails option using Search-Mailbox : instead of loading all mailboxes of an Org and piping all on Search-Mailbox, 
 I load all MAilboxDatabases first, and using ForEach ($Database in $DatabaseList) {$MBXBatch = Get-Mailbox -Database $Database; and piping $MBXBatch to Search-Mailbox instead.
 1.5.7.1 - Encoding issue - re-saved the file with UTF-8 encoding - French accents were messing up with the whole script
+1.6 - REplaced legacy Exchange Online connection function with modern Exchange Online Management V2 connection function (Connect-ExchOnlineV2)
 
 Intention for vNext:
 - Add CSV file picker to choose .CSV file as input for list of mailboxes to search in
@@ -86,7 +87,7 @@ $TestMode = $false
 
 $OrganizationNameEN = "Microsoft Exchange Search"
 $OrganizationNameFR = "Recherche Microsoft Exchange"
-$CurrentVersion = "1.5.7.1"
+$CurrentVersion = "1.6"
 
 #------------------------------------------------
 #region Application Functions
@@ -759,7 +760,33 @@ function Search-MailboxGUI
         }
 		
     }
-	
+    
+    
+    Function Connect-ExchOnlineV2
+    {
+        try
+        {
+            # TO ADD - TRY CATCH TO CHECK IF EXO V2 module is installed
+            # BOOKMARK
+            try {import-module ExchangeOnlineManagement -ErrorAction STOP}catch{
+                Write-host "ExchangeOnlineManagement aka EXO V2 may not be installed..." -ForegroundColor red
+                Write-host "Install EXO V2 using Install-Module ExchangeOnlineManagement" -ForegroundColor red
+            }
+
+            Connect-ExchangeOnline -ShowProgress $True
+
+            Log "Ok, you're in !" Green
+
+        }
+        catch
+        {
+            Log $Err003 Red
+            $MsgBoxError::Show($Err003, $Str000, "OK", "Error")
+        }
+		
+    }
+
+
     #endregion  Application Functions using variables from the form
     #----------------------------------------------
 	
@@ -797,7 +824,7 @@ function Search-MailboxGUI
         }
         Else
         {
-            Connect-ExchOnline
+            Connect-ExchOnlineV2
             if ($TestMode -eq $true) { Test-ExchCxTest } Else {	Test-ExchCx }
         }
         $StatusBar.Text = $Str004
@@ -910,6 +937,7 @@ function Search-MailboxGUI
                     }
                     Else
                     {
+                        $StatusBar.Text = $Str004
                         $MsgBoxError::Show($Err005, $Str000, "Ok", "Error")
                     }
                 }
@@ -917,7 +945,8 @@ function Search-MailboxGUI
             Else
             {
                 #chkUserNewMailboxSearch -eq $true
-                Log "Does $DiscoveryMailbox exist ? -->", $DiscoverMailboxTest, "it is", $DiscoveryFolder Green, white
+                Log "Does $DiscoveryMailbox exist ? -->", $DiscoverMailboxTest Green, White
+                Log "Discovery Folder is", $DiscoveryFolder Green, white
                 If ($DiscoverMailboxTest)
                 {
                     Log "$DiscoveryMailbox exists, now because we're using New-MailboxSearch we have to check if ""$DiscoveryFolder"" already exists because New-MailboxSearch cannot use an already existing Search name / folder..." Green
@@ -997,7 +1026,8 @@ function Search-MailboxGUI
                 Else
                 {
                     # $DiscoveryMailboxTest -eq $false (Discovery Mailbox Does not exist)
-                    $MsgBoxError::Show($Err005, $Str000, "Ok", "Error")			
+                    $MsgBoxError::Show($Err005, $Str000, "Ok", "Error")	
+                    $StatusBar.Text = $Str004		
                 }
             }
         } # (closing when user says "Cancel" if no e-mail address specified and don't want to search ALL mailboxes)
