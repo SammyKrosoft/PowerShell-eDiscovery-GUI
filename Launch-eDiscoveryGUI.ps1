@@ -71,6 +71,7 @@ Suggestion : add time in date selection for searches.
 I load all MAilboxDatabases first, and using ForEach ($Database in $DatabaseList) {$MBXBatch = Get-Mailbox -Database $Database; and piping $MBXBatch to Search-Mailbox instead.
 1.5.7.1 - Encoding issue - re-saved the file with UTF-8 encoding - French accents were messing up with the whole script
 1.6 - REplaced legacy Exchange Online connection function with modern Exchange Online Management V2 connection function (Connect-ExchOnlineV2)
+Also fixed a DiscoveryMailbox test logic issue (didn't update progress bar label in case DiscoverMailbox does not exist + output message didn't make sense at all - bruh what was I thinking ?? )
 
 Intention for vNext:
 - Add CSV file picker to choose .CSV file as input for list of mailboxes to search in
