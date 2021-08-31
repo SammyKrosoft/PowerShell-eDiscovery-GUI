@@ -72,8 +72,10 @@ I load all MAilboxDatabases first, and using ForEach ($Database in $DatabaseList
 1.5.7.1 - Encoding issue - re-saved the file with UTF-8 encoding - French accents were messing up with the whole script
 1.6 - REplaced legacy Exchange Online connection function with modern Exchange Online Management V2 connection function (Connect-ExchOnlineV2)
 Also fixed a DiscoveryMailbox test logic issue (didn't update progress bar label in case DiscoverMailbox does not exist + output message didn't make sense at all - bruh what was I thinking ?? )
-
+1.7 - changed SearchQuery "" to SearchQuery {} (curly brackets instead of double quotes for SearchQuery)
+1.7.1 - fixed From/Attachments/Keywords string generation issue
 Intention for vNext:
+- remove first occurrence in SearchQuery if no keywords specified
 - Add CSV file picker to choose .CSV file as input for list of mailboxes to search in
 Would also like to add function to test if each mailbox in the list exist before launching the search
 - Add date picker, and if no date selected, remove date filters in Search-Mailbox and New-MailboxSearch generated command lines
@@ -88,7 +90,7 @@ $TestMode = $false
 
 $OrganizationNameEN = "Microsoft Exchange Search"
 $OrganizationNameFR = "Recherche Microsoft Exchange"
-$CurrentVersion = "1.6"
+$CurrentVersion = "1.7"
 
 #------------------------------------------------
 #region Application Functions
@@ -528,8 +530,21 @@ function Search-MailboxGUI
         else { $Attachment = "" }
         if ($chkSubject.Checked -eq $true) { $Keyword = ("Subject:") + $Keyword }
 
-        $SearchQuery = ("""") + "$Keyword$From$Attachment" + " AND Received:$DateInt" + ("""")
-        $SearchQueryMulti = ("""") + "$Keyword$Attachment" + ("""")
+        if ([String]::IsNullOrEmpty($($txtKeyword.Text)) -and [String]::IsNullOrEmpty($Attachment)) {
+            if ([string]::IsNullOrEmpty($From)){
+                $SearchQuery = "{Received:`"$DateInt`"}"
+            }Else{
+                $SearchQuery = "{Received:`"$DateInt`"$From}"
+            }
+            $SearchQueryMulti = ""
+        } Else {
+            If ([string]::IsNullOrEmpty($From)){
+                $SearchQuery = ("{") + "$Keyword$Attachment" + " AND Received:`"$DateInt`"" + ("}")
+            } Else {
+                $SearchQuery = ("{") + "$Keyword$From$Attachment" + " AND Received:`"$DateInt`"" + ("}")
+            }
+            $SearchQueryMulti = ("{") + "$Keyword$Attachment" + ("}")
+        }
 		
         # Introducing $BlankSource boolean -> if no e-mail addresses specified, search all mailboxes 
         # To search all mailboxes: remove -SourceMailboxes parameters for New-SeachMailbox, and add "Get-Mailboxes" before the Search-Mailbox
