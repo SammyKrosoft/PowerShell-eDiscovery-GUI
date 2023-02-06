@@ -1,4 +1,4 @@
-﻿<#
+<#
     .NOTES
 	
 Needed a Graphical User Interface for eDiscovery tasks, for both Search-mailbox and New-MailboxSearch.
@@ -85,7 +85,7 @@ Would also like to add function to test if each mailbox in the list exist before
 
 #>
 #Switch the $TestMode variable to $true for tool testing, and to $false when finished testing
-$TestMode = $false
+$TestMode = $true
 
 
 $OrganizationNameEN = "Microsoft Exchange Search"
@@ -526,8 +526,16 @@ function Search-MailboxGUI
             $FromMulti = ""
         }
 		
-        if ($chkAttachment.Checked -eq $true) { $Attachment = (" AND attachment:") + ('''') + $txtAttachment.Text + ('''')}
-        else { $Attachment = "" }
+        if ($chkAttachment.Checked -eq $true) { 
+            $chkSubject.Enabled = $false
+            $txtKeyword.Enabled = $false
+            $Attachment = ("attachment:") + ('''') + $txtAttachment.Text + ('''')
+        }
+        else { $Attachment = ""
+            $chkSubject.Enabled = $true
+            $txtKeyword.Enabled = $true
+        }
+
         if ($chkSubject.Checked -eq $true) { $Keyword = ("Subject:") + $Keyword }
 
         if ([String]::IsNullOrEmpty($($txtKeyword.Text)) -and [String]::IsNullOrEmpty($Attachment)) {
@@ -539,11 +547,23 @@ function Search-MailboxGUI
             $SearchQueryMulti = ""
         } Else {
             If ([string]::IsNullOrEmpty($From)){
-                $SearchQuery = ("{") + "$Keyword$Attachment" + " AND Received:`"$DateInt`"" + ("}")
+                if ([String]::IsNullOrEmpty($Attachment)){
+                    $SearchQuery = ("{") + "$Keyword" + " AND Received:`"$DateInt`"" + ("}")
+                } else {
+                    $SearchQuery = ("{") + "$Attachment" + " AND Received:`"$DateInt`"" + ("}")
+                }
             } Else {
-                $SearchQuery = ("{") + "$Keyword$From$Attachment" + " AND Received:`"$DateInt`"" + ("}")
+                if ([String]::IsNullOrEmpty($Attachment)){
+                $SearchQuery = ("{") + "$Keyword$From" + " AND Received:`"$DateInt`"" + ("}")
+                } else {
+                    $SearchQuery = ("{") + "$Attachment$From" + " AND Received:`"$DateInt`"" + ("}")
+                }
             }
-            $SearchQueryMulti = ("{") + "$Keyword$Attachment" + ("}")
+            if ([String]::IsNullOrEmpty($Attachment)){
+                $SearchQueryMulti = ("{") + "$Keyword" + ("}")
+            } else {
+                $SearchQueryMulti = ("{") + "$Attachment" + ("}")
+            }
         }
 		
         # Introducing $BlankSource boolean -> if no e-mail addresses specified, search all mailboxes 
